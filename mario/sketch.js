@@ -64,8 +64,19 @@ function preload() {
 function setup() {
   createCanvas(850, 480)
 
-  tiles = generateTiles(tileSpriteSheet, 16, 16)
-  createPlatforms(gamemap)  
+  tiles = generateTiles(tileSpriteSheet, 16, 16) // array of images
+  createPlatforms(gamemap)  // turn CSV into visual/functional map
+
+  alienSprites = generateTiles(alienSpriteSheet, 16, 20)
+  createAlien()
+}
+
+function createAlien() {
+  idleAlien = [alienSprites[0]] // first element in png
+  walkingAlien = alienSprites.slice(7,11) // last 4
+  jumpingAlien = alienSprites[3] // middle guy
+
+  alien = new AnimatedSprite(idleAlien[0], 160, 188, 'PLAYER', walkingAlien, idleAlien, jumpingAlien)
 }
 
 function createPlatforms(gamemap) { // gamemap is CSV file
@@ -87,8 +98,35 @@ function createPlatforms(gamemap) { // gamemap is CSV file
 function draw() {
   background('#80a1f2')
   scale(rez)
+
+  // console.log(platforms)
   for(let tile of platforms) {
     tile.display()
   }
 
+  alienUpdate()
+  alien.display()
+
+}
+
+function keyPressed() {
+  if(keyCode == LEFT_ARROW) { // p5js const
+    alien.dx = -WALKING_SPEED
+    alien.state = 'walking'
+  } else if(keyCode = RIGHT_ARROW) {
+    alien.dx = WALKING_SPEED
+    alien.state = 'walking'
+  // } else if(keyCode == SPACE) { // user const above
+  } else {
+    alien.state = 'idle'
+  }
+}
+
+function keyReleased() {
+  alien.dx = 0
+  alien.state = 'idle'
+}
+
+function alienUpdate() {
+  alien.x += alien.dx
 }
