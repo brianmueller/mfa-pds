@@ -130,3 +130,26 @@ function keyReleased() {
 function alienUpdate() {
   alien.x += alien.dx
 }
+
+function checkCollision(s1, s2) {
+  // check for NO overlap
+  
+  let noXOverlap = s1.getRight() <= s2.getLeft() || s1.getLeft() >= s2.getRight()
+  let noYOverlap = s1.getBottom() <= s2.getTop() || s1.getTop() >= s2.getBottom()
+
+  if(noXOverlap || noYOverlap) {
+    return false
+  } else {
+    return true
+  }
+}
+
+function checkCollisionList(s, list) { // s: player; list: objects to check collision with
+  let collisionList = [] // to be returned
+  for(let sprite of list) {
+    if(checkCollision(s,sprite) && sprite.collidable) {
+      collisionList.push(sprite)
+    }
+  }
+  return collisionList
+}

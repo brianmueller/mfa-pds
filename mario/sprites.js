@@ -12,6 +12,38 @@ class Sprite {
     display() {
         image(this.img, this.x, this.y, this.w, this.h)
     }
+
+    getTop() {
+        return this.y
+    }
+
+    getBottom() {
+        return this.y + this.h
+    }
+
+    getLeft() {
+        return this.x
+    }
+
+    getRight() {
+        return this.x + this.w
+    }
+
+    setTop(y) {
+        this.y = y
+    }
+
+    setBottom(y) {
+        this.y = y - this.h // scoot it up
+    }
+
+    setLeft(x) {
+        this.x = x
+    }
+
+    setRight(x) {
+        this.x = x - this.w // scoot it left
+    }
 }
 
 class AnimatedSprite extends Sprite {
