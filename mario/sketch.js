@@ -63,6 +63,7 @@ function preload() {
 
 function setup() {
   createCanvas(850, 480)
+  frameRate(30)
 
   tiles = generateTiles(tileSpriteSheet, 16, 16) // array of images
   createPlatforms(gamemap)  // turn CSV into visual/functional map
@@ -113,10 +114,13 @@ function keyPressed() {
   if(keyCode == LEFT_ARROW) { // p5js const
     alien.dx = -WALKING_SPEED
     alien.state = 'walking'
-  } else if(keyCode = RIGHT_ARROW) {
+  } else if(keyCode == RIGHT_ARROW) {
     alien.dx = WALKING_SPEED
     alien.state = 'walking'
   // } else if(keyCode == SPACE) { // user const above
+  } else if(keyCode == SPACE && isOnPlatform(alien,platforms)) {
+    alien.dy = -JUMP_VELOCITY
+    alien.state = 'jumping'
   } else {
     alien.state = 'idle'
   }
@@ -129,6 +133,7 @@ function keyReleased() {
 
 function alienUpdate() {
   alien.x += alien.dx
+  alien.y += alien.dy
 }
 
 function checkCollision(s1, s2) {
@@ -153,3 +158,19 @@ function checkCollisionList(s, list) { // s: player; list: objects to check coll
   }
   return collisionList
 }
+
+function isOnPlatform(s, list) {
+  s.y += 5
+  let collisions = checkCollisionList(s, list)
+  s.y -= 5
+  if(collisions.length > 0) {
+    return true
+  } else {
+    return false
+  }
+}
+
+
+
+
+
