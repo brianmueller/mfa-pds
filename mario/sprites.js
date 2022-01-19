@@ -49,8 +49,8 @@ class Sprite {
 class AnimatedSprite extends Sprite {
     constructor(img, x, y, type, walking, idle, jumping) {
         super(img, x, y, type)
-        this.dx = 0;
-        this.dy = 0;
+        this.dx = 0
+        this.dy = 0
         this.state = 'idle'
         this.walking = walking // array
         this.idle = idle

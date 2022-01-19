@@ -75,7 +75,7 @@ function setup() {
 function createAlien() {
   idleAlien = [alienSprites[0]] // first element in png
   walkingAlien = alienSprites.slice(7,11) // last 4
-  jumpingAlien = alienSprites[3] // middle guy
+  jumpingAlien = [alienSprites[3]] // middle guy
 
   alien = new AnimatedSprite(idleAlien[0], 160, 188, 'PLAYER', walkingAlien, idleAlien, jumpingAlien)
 }
@@ -105,9 +105,49 @@ function draw() {
     tile.display()
   }
 
-  alienUpdate()
+  
   alien.display()
+  resolvePlatformCollisions(alien, platforms)
+}
 
+// also updates alien's position
+function resolvePlatformCollisions(s, list) {
+  s.dy += GRAVITY
+  s.y += s.dy
+
+  let collisions = checkCollisionList(s, list) // array of possible collisions
+  if(collisions.length > 0) {
+    let collided = collisions[0]
+    if(s.dy > 0) { // sprite is falling down
+      // so bottom of sprite gets set to top of collided
+      s.setBottom(collided.getTop())
+    } else if(s.dy < 0) { // sprite is moving up (jumping)
+      s.setTop(collided.setBottom())
+
+      // check if jump block is hit
+      if(collided.type == JUMP_BLOCK) {
+        collided.img = tiles[JUMP_BLOCK_HIT]
+        collided.type = JUMP_BLOCK_HIT
+        // play coin sound
+        coins++;
+      } else if(collided.type == JUMP_BLOCK_HIT) {
+        // play hit sound
+      }
+    }
+    s.dy = 0;
+  }
+
+  // check left and right
+  s.x += s.dx
+  collisions = checkCollisionList(s, list)
+  if(collisions.length > 0) {
+    let collided = collisions[0]
+    if(s.dx > 0) { // moving right
+      s.setRight(collided.getLeft())
+    } else if(s.dx < 0) { // moving left
+      s.setLeft(collided.getRight())
+    }
+  }
 }
 
 function keyPressed() {
@@ -126,9 +166,19 @@ function keyPressed() {
   }
 }
 
+// function keyReleased() {
+//   alien.dx = 0
+//   alien.state = 'idle'
+// }
+
 function keyReleased() {
-  alien.dx = 0
-  alien.state = 'idle'
+  if(keyCode == LEFT_ARROW || keyCode == RIGHT_ARROW) {
+    alien.dx = 0
+    alien.state = 'idle'
+  } else if(keyCode == SPACE) {
+    alien.dy = 0
+    alien.state = 'idle'
+  }
 }
 
 function alienUpdate() {
