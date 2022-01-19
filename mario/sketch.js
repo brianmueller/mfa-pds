@@ -100,6 +100,8 @@ function draw() {
   background('#80a1f2')
   scale(rez)
 
+  scroll()
+
   // console.log(platforms)
   for(let tile of platforms) {
     tile.display()
@@ -108,6 +110,31 @@ function draw() {
   
   alien.display()
   resolvePlatformCollisions(alien, platforms)
+}
+
+function scroll() {
+  let rightBound = viewX + width / rez - RIGHT_MARGIN
+  // backdrop ends x:260 * rez
+  if(alien.getRight() > rightBound && viewX < 260) { // don't want to go totally off of the screen
+    viewX += alien.getRight() - rightBound
+  }
+
+  let leftBound = viewX + LEFT_MARGIN
+  if(alien.getLeft() < leftBound && viewX > 0) {
+    viewX -= leftBound - alien.getLeft()
+  }
+
+  let bottomBound = viewY + height / rez - VERTICAL_MARGIN
+  if(alien.getBottom() > bottomBound) {
+    viewY += alien.getBottom() - bottomBound
+  }
+
+  let topBound = viewY + VERTICAL_MARGIN
+  if(alien.getTop() < topBound) {
+    viewY -= topBound - alien.getTop()
+  }
+
+  translate(-viewX,-viewY)
 }
 
 // also updates alien's position
