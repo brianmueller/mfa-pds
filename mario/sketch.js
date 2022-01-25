@@ -48,7 +48,13 @@ const POLE_TOP = '7'
 const POLE_MIDDLE = '11'
 const POLE_BOT = '15'
 
-const COLLIDABLES = [TILE_BRICK, JUMP_BLOCK, JUMP_BLOCK_HIT, MUSHROOM_TOP, MUSHROOM_BOTTOM, PLAYER]
+// flag
+const FLAG_LEFT = '12'
+const FLAG_MID = '13'
+const FLAG_RIGHT = '14'
+
+
+const COLLIDABLES = [TILE_BRICK, JUMP_BLOCK, JUMP_BLOCK_HIT, MUSHROOM_TOP, MUSHROOM_BOTTOM, PLAYER, POLE_BOT, POLE_MIDDLE]
 
 // margins
 const LEFT_MARGIN = 60
@@ -59,17 +65,17 @@ function preload() {
   tileSpriteSheet = loadImage('graphics/spritesheet.png')
   alienSpriteSheet = loadImage('graphics/blue_alien.png')
   gamemap = loadTable('graphics/gamemap.csv')
+  coinSound = loadSound('sounds/coin.wav')
+  hitSound = loadSound('sounds/hit.wav')
+  jumpSound = loadSound('sounds/jump.wav')
+  deathSound = loadSound('sounds/death.wav')
 }
 
 function setup() {
   createCanvas(850, 480)
   frameRate(30)
 
-  tiles = generateTiles(tileSpriteSheet, 16, 16) // array of images
-  createPlatforms(gamemap)  // turn CSV into visual/functional map
-
-  alienSprites = generateTiles(alienSpriteSheet, 16, 20)
-  createAlien()
+  init()
 }
 
 function createAlien() {
@@ -96,6 +102,14 @@ function createPlatforms(gamemap) { // gamemap is CSV file
   }
 }
 
+function init() {
+  tiles = generateTiles(tileSpriteSheet, 16, 16) // array of images
+  createPlatforms(gamemap)  // turn CSV into visual/functional map
+
+  alienSprites = generateTiles(alienSpriteSheet, 16, 20)
+  createAlien()
+}
+
 function draw() {
   background('#80a1f2')
   scale(rez)
@@ -110,6 +124,25 @@ function draw() {
   
   alien.display()
   resolvePlatformCollisions(alien, platforms)
+
+  displayScore()
+  checkDeath()
+}
+
+function checkDeath() {
+  if(alien.getTop() > rows * 16 + 1000) {
+    lives--
+    viewX = 0
+    viewY = 0
+    deathSound.play()
+    init()
+  }
+}
+
+function displayScore() {
+  fill(255,0,0)
+  text("Coins: " + coins, viewX + 15, viewY + 20)
+  text("Lives: " + lives, viewX + 15, viewY + 35)
 }
 
 function scroll() {
@@ -155,10 +188,10 @@ function resolvePlatformCollisions(s, list) {
       if(collided.type == JUMP_BLOCK) {
         collided.img = tiles[JUMP_BLOCK_HIT]
         collided.type = JUMP_BLOCK_HIT
-        // play coin sound
+        coinSound.play()
         coins++;
       } else if(collided.type == JUMP_BLOCK_HIT) {
-        // play hit sound
+        hitSound.play()
       }
     }
     s.dy = 0;
@@ -193,11 +226,6 @@ function keyPressed() {
   }
 }
 
-// function keyReleased() {
-//   alien.dx = 0
-//   alien.state = 'idle'
-// }
-
 function keyReleased() {
   if(keyCode == LEFT_ARROW || keyCode == RIGHT_ARROW) {
     alien.dx = 0
@@ -206,11 +234,6 @@ function keyReleased() {
     alien.dy = 0
     alien.state = 'idle'
   }
-}
-
-function alienUpdate() {
-  alien.x += alien.dx
-  alien.y += alien.dy
 }
 
 function checkCollision(s1, s2) {
