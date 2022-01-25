@@ -12,6 +12,8 @@ let viewY = 0
 let coins = 0
 let lives = 3
 let coinSound, hitSound, musicSound, jumpSound, deathSound
+let gameOver = false
+let coinCount = 0
 
 
 const SPACE = 32
@@ -88,7 +90,7 @@ function createAlien() {
 
 function createPlatforms(gamemap) { // gamemap is CSV file
   platforms = []
-
+  coinCount = 0
   rows = gamemap.getRowCount() // how many in CSV file
   cols = gamemap.getColumnCount()
 
@@ -98,11 +100,21 @@ function createPlatforms(gamemap) { // gamemap is CSV file
       let sprite = tiles[spriteIndex] // each sprite is png
       let tile = new Sprite(sprite, sprite.width * c, sprite.height * r, spriteIndex)
       platforms.push(tile)
+      if(spriteIndex == JUMP_BLOCK) {
+        coinCount++
+      }
     }
   }
 }
 
 function init() {
+  viewX = 0;
+  viewY = 0;
+  coins = 0;
+  lives = 3;
+
+  translate(viewX, viewY)
+
   tiles = generateTiles(tileSpriteSheet, 16, 16) // array of images
   createPlatforms(gamemap)  // turn CSV into visual/functional map
 
@@ -125,17 +137,53 @@ function draw() {
   alien.display()
   resolvePlatformCollisions(alien, platforms)
 
+  checkGameOver()
   displayScore()
-  checkDeath()
+}
+
+function checkGameOver() {
+  if(!gameOver) {
+    checkDeath()
+  }
+
+  if(lives == 0) {
+    // game over
+    fill(255, 0 ,0)
+    textAlign(CENTER)
+    text("Game Over", width/4 + viewX, height/4 + viewY) // because rez is 2
+    text("Click to Restart", width/4 + viewX, height/4+ 20 + viewY)
+    noLoop()
+  } else if(coins == coinCount) { // won game
+    fill(255, 0 ,0)
+    textAlign(CENTER)
+    text("You collected all the coins!", width/4 + viewX, height/4 + viewY)
+    text("Click to Restart", width/4 + viewX, height/4+ 20 + viewY)
+    gameOver = true
+    noLoop()
+  }
+}
+
+function mousePressed() {
+  if(gameOver) {
+    gameOver = false
+    init()
+    loop()
+  }
 }
 
 function checkDeath() {
   if(alien.getTop() > rows * 16 + 1000) {
     lives--
-    viewX = 0
-    viewY = 0
-    deathSound.play()
-    init()
+    if(lives == 0) { 
+      gameOver = true
+    } else {
+      viewX = 0
+      viewY = 0
+      translate(viewX,viewY)
+      alien.x = 160
+      alien.y = 188
+      deathSound.play()
+    }
   }
 }
 
