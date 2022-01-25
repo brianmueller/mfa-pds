@@ -230,7 +230,7 @@ function resolvePlatformCollisions(s, list) {
       // so bottom of sprite gets set to top of collided
       s.setBottom(collided.getTop())
     } else if(s.dy < 0) { // sprite is moving up (jumping)
-      s.setTop(collided.setBottom())
+      s.setTop(collided.getBottom())
 
       // check if jump block is hit
       if(collided.type == JUMP_BLOCK) {
