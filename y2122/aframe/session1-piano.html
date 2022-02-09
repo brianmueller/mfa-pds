@@ -18,9 +18,18 @@
     </head>
     <body>
         <!-- HTML -->
+
+
         <a-scene>
-            <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
-            <a-sky color="#ECECEC"></a-sky>
+
+            <a-assets>
+                <img id="grass" src="grass.jpg">
+                <img id="wood" src="wood.jpg">
+                <img id="seats" src="seats2.jpg">
+            </a-assets>
+
+            <a-plane src="#wood" repeat="8 8" position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#AAAAAA"></a-plane>
+            <a-sky src="#seats" repeat="2 3"></a-sky>
             
             <!-- <a-box position="-1 0.5 -3" color="#4CC3D9"></a-box> -->
         </a-scene>
