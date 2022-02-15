@@ -53,11 +53,12 @@
 
 
             // white keys
-            let scale = 0.04;
-            for(let i = 0; i < 88; i++){
+            let numKeys = 52;
+            let scale = 4/numKeys;
+            for(let i = 0; i < numKeys; i++){
                 let newBox = document.createElement('a-box');
                 let coords = '';
-                let x = -2 + i*scale*1.125;
+                let x = -2 + i*scale + scale/2; // shift left + next key + half of a key
                 let y = 0;
                 let z = -3;
                 coords += x + ' ' + y + ' ' + z;
@@ -65,23 +66,28 @@
                 newBox.setAttribute('width',scale);
                 newBox.setAttribute('height',0.1);
                 newBox.setAttribute('depth',0.2);
+                newBox.setAttribute('color',getRandomColor());
                 document.querySelector('a-scene').appendChild(newBox);
+            }
+
+            function getRandomColor(){
+                return "#" + Math.floor(Math.random()*16777215).toString(16);
             }
 
             // black keys, starting from D#
             let blacks = [1,0,1,1,1,0,1];
-            for(let i = 0; i < 88; i++){
+            for(let i = 0; i < numKeys-1; i++){
                 if(blacks[i%7]){
                     let newBox = document.createElement('a-box');
                     let coords = '';
-                    let x = -2+scale*-0.75 + i*scale*1.125;
+                    let x = -2 + i*scale + scale; // shift left + next key + half of a key
                     let y = 0.05;
-                    let z = -3.025;
+                    let z = -3.04;
                     coords += x + ' ' + y + ' ' + z;
                     newBox.setAttribute('position',coords);
-                    newBox.setAttribute('width',scale*0.75);
+                    newBox.setAttribute('width',scale*0.5);
                     newBox.setAttribute('height',0.05);
-                    newBox.setAttribute('depth',0.15);
+                    newBox.setAttribute('depth',0.125);
                     newBox.setAttribute('color','#000');
                     document.querySelector('a-scene').appendChild(newBox);
                 }
