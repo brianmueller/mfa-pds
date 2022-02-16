@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <!-- <link href="style.css" rel="stylesheet" type="text/css" /> -->
+        <style>
+            /* CSS */
+            
+        </style>
+        
+        <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+
+        <title>Aframe Piano</title>
+    </head>
+    <body>
+        <!-- HTML -->
+
+
+        <a-scene>
+
+            <a-assets>
+                <img id="grass" src="grass.jpg">
+                <img id="wood" src="wood.jpg">
+                <img id="seats" src="seats2.jpg">
+            </a-assets>
+
+            <a-plane src="#wood" repeat="8 8" position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#AAAAAA"></a-plane>
+            <a-sky src="#seats" repeat="2 3"></a-sky>
+            
+            <!-- <a-box position="-1 0.5 -3" color="#4CC3D9"></a-box> -->
+        </a-scene>
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- <script src="script.js"></script> -->
+        <script>
+            // JS
+            
+            // let newBox = document.createElement('a-box');
+            // let coords = '';
+            // let x = 1;
+            // let y = 0;
+            // let z = -3;
+            // coords += x + ' ' + y + ' ' + z;
+            // newBox.setAttribute('position',coords);
+            // newBox.setAttribute('width',0.04);
+            // newBox.setAttribute('height',0.1);
+            // newBox.setAttribute('depth',0.25);
+            // document.querySelector('a-scene').appendChild(newBox);
+
+
+            // white keys
+            let numKeys = 52;
+            let scale = 4/numKeys;
+            for(let i = 0; i < numKeys; i++){
+                let newBox = document.createElement('a-box');
+                let coords = '';
+                let x = -2 + i*scale + scale/2; // shift left + next key + half of a key
+                let y = 0;
+                let z = -3;
+                coords += x + ' ' + y + ' ' + z;
+                newBox.setAttribute('position',coords);
+                newBox.setAttribute('width',scale);
+                newBox.setAttribute('height',0.1);
+                newBox.setAttribute('depth',0.2);
+                newBox.setAttribute('color',getRandomColor());
+                newBox.classList.add('white');
+                newBox.classList.add('key');
+                document.querySelector('a-scene').appendChild(newBox);
+            }
+
+            function getRandomColor(){
+                return "#" + Math.floor(Math.random()*16777215).toString(16);
+            }
+
+            // black keys, starting from D#
+            let blacks = [1,0,1,1,1,0,1];
+            for(let i = 0; i < numKeys-1; i++){
+                if(blacks[i%7]){
+                    let newBox = document.createElement('a-box');
+                    let coords = '';
+                    let x = -2 + i*scale + scale; // shift left + next key + half of a key
+                    let y = 0.05;
+                    let z = -3.04;
+                    coords += x + ' ' + y + ' ' + z;
+                    newBox.setAttribute('position',coords);
+                    newBox.setAttribute('width',scale*0.5);
+                    newBox.setAttribute('height',0.05);
+                    newBox.setAttribute('depth',0.125);
+                    newBox.setAttribute('color','#000');
+                    newBox.classList.add('black');
+                    newBox.classList.add('key');
+                    document.querySelector('a-scene').appendChild(newBox);
+                }
+            }
+            
+            
+            function loop(){
+                resetWhite();
+                resetBlack();
+                playKeys();
+                setTimeout(loop,200);
+            }
+
+            function resetWhite(){
+                document.querySelectorAll('.white').forEach(function(key){
+                    let pos = key.getAttribute('position');
+                    pos.y = 0;
+                }); 
+            }
+
+            function resetBlack(){
+                document.querySelectorAll('.black').forEach(function(key){
+                    let pos = key.getAttribute('position');
+                    pos.y = 0.05;
+                }); 
+            }
+
+            function playKeys(){
+                document.querySelectorAll('.key').forEach(function(key){
+                    if(Math.random() < 0.05){
+                        let pos = key.getAttribute('position');
+                        pos.y -= 0.02;
+                    }
+                }); 
+            }
+        
+
+            loop();
+
+
+        </script>
+    </body>
+</html>
