@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <!--<link href="style.css" rel="stylesheet" type="text/css" />-->
+        <style>
+            /* CSS */
+
+        </style>
+
+        <title>Title</title>
+    </head>
+    <body>
+        <!-- HTML -->
+
+        <h1>Username:</h1>
+        <input type="text" id="username">
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+        <!--<script src="script.js"></script>-->
+
+        <script type="module">
+          // Import the functions you need from the SDKs you need
+          import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
+
+          // from Ashwin's tutorial 1: https://docs.google.com/document/d/1quaz9c-12u8fhNDDAhHbx4HBxa55haB53Nl8-idT9iI/edit
+          import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-database.js";
+
+          // TODO: Add SDKs for Firebase products that you want to use
+          // https://firebase.google.com/docs/web/setup#available-libraries
+
+          // Your web app's Firebase configuration
+          const firebaseConfig = {
+            apiKey: "AIzaSyAmKEFgm7mc0L4LRTU_slN4r2gprjnSQ18",
+            authDomain: "fir-learning-54799.firebaseapp.com",
+            databaseURL: "https://fir-learning-54799.firebaseio.com",
+            projectId: "fir-learning-54799",
+            storageBucket: "fir-learning-54799.appspot.com",
+            messagingSenderId: "884794095306",
+            appId: "1:884794095306:web:742b322afb1e3228d7a633"
+          };
+
+          // Initialize Firebase
+          const app = initializeApp(firebaseConfig);
+        </script>
+
+
+    </body>
+</html>
