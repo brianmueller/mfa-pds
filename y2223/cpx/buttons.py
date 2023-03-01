@@ -1,39 +1,46 @@
+import time
+import math
 from adafruit_circuitplayground import cp
 
 cp.pixels.brightness = 0.1
 
+# 1
+# while True:
+#     print("Light:", cp.light)
+#     print((cp.light,))
+#     time.sleep(0.1)
+    
+# 2
+# while True:
+#     if cp.light > 20:
+#         #Turn off all lights
+#         cp.pixels.fill((0, 0, 0))
+#     else:
+#         #Turn on all lights
+#         cp.pixels.fill((255, 255, 255))
+
+# 3
+# while True:
+#     if cp.light > 80:
+#         #Turn lights green
+#         cp.pixels.fill((0, 255, 0))
+#     elif cp.light > 40:
+#         #Turn lights yellow
+#         cp.pixels.fill((255, 255, 0))
+#     else:
+#         #Turn lights red
+#         cp.pixels.fill((255, 0, 0))
+#     print("Light:", cp.light)
+#     time.sleep(0.1)
+
+# 4
+# night light: less ambient light = more LED light
+# range: 120 (bright ambient) to 20 (dim ambient)
+# cp.pixels[0:5] = [(255, 0, 0)] * 5 # first half
+# cp.pixels[5:10] = [(255, 0, 0)] * 5 # second half
+
 while True:
-    # CHALLENGE 1
-    # if cp.button_a:
-    #     print("Button A pressed!")
-    #     cp.pixels[0] = (255, 0, 0)
-    # else: 
-    #     cp.pixels.fill((0, 0, 0))
-
-    # CHALLENGE 2
-    # if cp.button_a:
-    #     print("Button A pressed!")
-    #     cp.pixels[0] = (255, 0, 0)
-    # if cp.button_b:
-    #     cp.pixels.fill((0, 0, 0))
-
-    # CHALLENGE 3
-    # if cp.button_a:
-    #     cp.pixels[2] = (0, 255, 0) # green
-    # else:
-    #     cp.pixels.fill((0, 0, 0))
-    # if cp.button_b:
-    #     cp.pixels[7] = (0, 0, 255) # blue
-    # else:
-    #     cp.pixels.fill((0, 0, 0))
-
-    # BONUS CHALLENGE
-    cp.pixels.fill((0, 0, 0))  # Turn off the NeoPixels if they're on!
-    if cp.button_a:
-        cp.pixels[0:5] = [(255, 0, 0)] * 5 # first half
-    else:
-        cp.pixels[0:5] = [(0, 0, 0)] * 5
-    if cp.button_b:
-        cp.pixels[5:10] = [(255, 0, 0)] * 5 # second half
-    else:
-        cp.pixels[5:10] = [(0, 0, 0)] * 5
+    cp.pixels.fill((0, 0, 0)) # reset
+    scaledLight = math.floor((cp.light-20)/10) # 9 to 0
+    numLeds = 10 - scaledLight
+    cp.pixels[0:numLeds] = [(255, 255, 255)] * numLeds
