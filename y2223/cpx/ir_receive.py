@@ -1,6 +1,7 @@
 import pulseio
 import board
 import adafruit_irremote
+from adafruit_circuitplayground import cp
 
 # Create a 'pulseio' input, to listen to infrared signals on the IR receiver
 pulsein = pulseio.PulseIn(board.IR_RX, maxlen=120, idle_state=True)
