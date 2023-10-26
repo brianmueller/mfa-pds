@@ -15,13 +15,25 @@
     <script src="drawGrid.js"></script>
     <script>
         // ⭐️ Step 0: Connect the p5.play library in index.html on line 13  (right before </body>) 
-
+        var sprite1;
+        var sprite2;
+        var sprite3;
+        var floor;
 
         function setup() {
-            createCanvas(400, 400);
+            createCanvas(800, 600);
             
             // ⭐️ STEP 1: Let's make sprites!
-            
+            sprite1 = new Sprite();
+            sprite1.x = 100;
+            sprite1.y = 300;
+
+            sprite2 = new Sprite(256, 128, 80); // 3 arguments: circle; 2 arguments: square; 4 arguments: rectangle
+
+            sprite3 = new Sprite(width/2, height/2);
+
+            floor = new Sprite(width/2, height-25, width, 50, 'static')
+
             
 
             
@@ -29,7 +41,7 @@
             // *  Set gravity to Earth's gravity (9.8 m/s^2)
             // *  Experiement with gravity!  What if we change the value?  Can we get gravity to go sideways?
             // *  Make floor sprite that does not respond to gravity
-
+            world.gravity.y = 9.8;
 
 
         }
@@ -40,18 +52,24 @@
             // ⭐️ STEP 2: Sprite movement and interaction
             // * Make a sprite follow the mouse
             // * Use direction, speed, vel to make sprite move
+            sprite2.x = mouse.x;
+            sprite2.y = mouse.y;
 
+            // sprite1.x += 5;
+            
 
 
             
             // ⭐️ STEP 3: moveTowards
-
+            sprite3.moveTowards(mouse);
 
 
             // ⭐️ STEP 5: conditionals interaction (collide, overlap)
             // * if two sprites collide, make one change
             // * if two sprites overlap, collect one
-
+            if(sprite1.collides(sprite3)){
+              sprite1.color = "red";
+            }
 
 
 

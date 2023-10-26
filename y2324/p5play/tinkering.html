@@ -14,13 +14,50 @@
     <script src="https://p5play.org/v3/p5play.js"></script>
     <script src="drawGrid.js"></script>
     <script>
-        function setup() {
-            createCanvas(400, 400);
 
+        
+
+        let balls, floor;
+        
+        function setup() {
+            new Canvas(800, 600);
+            world.gravity.y = 10;
+            floor = new Sprite(width/2, height-25, width, 50, 'static');
+            balls = [];
+
+            // class Ball extends Sprite {
+            //   constructor(x,y,d,r,g,b) {
+            //     super(x,y,d);
+            //     this.r = r;
+            //     this.g = g;
+            //     this.b = b;
+            //   }
+            // }
+            
         }
 
         function draw() {
-            background(220);
+            background(225);
+            for(let i = 0; i < balls.length; i++){
+              for(let j = i; j < balls.length; j++){
+                if(balls[i].collides(balls[j])){
+                  balls[i].color = color(random(255),random(255),random(255));
+                  balls[j].color = color(random(255),random(255),random(255));
+                }
+              }
+            }
+        }
+
+        function mouseDragged(){
+          let newBall = new Sprite(mouse.x, mouse.y, 25);
+            // let newBall = new Ball(mouse.x, mouse.y, 25, 0, 255, 0);
+            // newBall.r = 0;
+            // newBall.g = 255;
+            // newBall.b = 0;
+            // newBall.color = color(`rgb(${r},${g},${b})`);
+            newBall.color = "green";
+            // newBall.color = color(newBall.r,newBall.g,newBall.b);
+            balls.push(newBall);
             
         }
     </script>
