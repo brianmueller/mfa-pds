@@ -119,10 +119,12 @@
             }
 
             function keyPressed(){
-                document.body.append(contros+"<br>")
+                let p = document.createElement('p');
+                p.innerHTML = JSON.stringify(contros)
+                document.body.appendChild(p);
             }
 
         </script>
-        <p>4/17 9:29am</p>
+        <p>4/17 9:33am</p>
     </body>
 </html>
