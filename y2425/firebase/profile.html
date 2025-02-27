@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<!-- Tutorial -->
+<!-- https://docs.google.com/document/d/1oDiBEqqA_WNAQ605y_ca4B8uau-ay_QqhimzsapGS1g/edit?tab=t.0 -->
 <html>
     
 <head>
@@ -30,13 +32,15 @@
 <body>
   <img src="https://avatars.githubusercontent.com/u/12280819?v=4" class="img-thumbnail col-2 rounded-circle mt-4 mb-4">
   <p>Hi! I'm Brian, a NYC high school CS teacher. Say hello!</p>
-  <input type="email" placeholder="Your email">
-  <input type="submit">
+  <input type="text" placeholder="Your name" id="name">
+  <input type="email" placeholder="Your email" id="email">
+  <input type="submit" id="submit">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   
   <script type="module">
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-database.js";
     // TODO: Add SDKs for Firebase products that you want to use
     // https://firebase.google.com/docs/web/setup#available-libraries
   
@@ -52,7 +56,65 @@
   
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
-  </script>
+    const db = getDatabase(app);
+
+    const name = document.querySelector("#name") 
+    const email = document.querySelector("#email")
+    document.querySelector('#submit').addEventListener('click', Submit)
+
+    function Submit() {
+	  const timestamp = buildTimestamp()
+
+      console.log(timestamp)
+	  
+	//   set(ref(db, timestamp), {
+	// 	name: name.value,
+	// 	email: email.value,
+	//   });
+
+	  name.value = ""
+	  email.value = ""
+	}
+
+    function buildTimestamp() {
+	  const now = new Date();
+	  let timestamp = now.getFullYear().toString() + "/";
+	  //const month = now.toLocaleString('default', { month: 'long' });
+
+	  let month = now.getMonth()+1   //add 1 because Javascript uses 0 for January
+	  month = month.toString()
+	  month = addLeadingZero(month)
+	  timestamp += month + "/"; 
+
+	  let date = now.getDate().toString()
+	  date = addLeadingZero(date)
+	  timestamp += date + "/";
+
+	  let hours = now.getHours().toString()
+	  hours = addLeadingZero(hours)
+	  timestamp += hours + ":";
+
+	  let minutes = now.getMinutes().toString()
+	  minutes = addLeadingZero(minutes)
+	  timestamp += minutes + ":";
+
+	  let seconds = now.getSeconds().toString()
+	  seconds = addLeadingZero(seconds)
+	  timestamp += seconds;
   
+	  return timestamp
+	}
+	
+	function addLeadingZero(units) {
+		if (units.length < 2) {
+			units = "0" + units
+		}
+		return units
+	}
+
+
+
+  </script>
+
 </body>
 </html>
