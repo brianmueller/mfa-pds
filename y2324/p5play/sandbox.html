@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>p5play</title>
+        <!-- <link href="style.css" rel="stylesheet" type="text/css" /> -->
+        
+    </head>
+    <body>
+        <!-- <script src="script.js"></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/p5@1.6.0/lib/p5.js"></script>
+        <script src="https://p5play.org/v3/planck.min.js"></script>
+        <script src="https://p5play.org/v3/p5play.js"></script>
+        <script src="drawGrid.js"></script>
+        <script>
+
+            
+            let player1, player2;
+            let players, floor, txt;
+            let playerSize = 50;
+            let xVel = 0.1;
+            let yVel = 5;
+            
+            function setup() {
+                // new Canvas(displayWidth*0.99, displayHeight*0.98);
+                new Canvas(800,600);
+                world.gravity.y = 10;
+
+                floor = new Sprite(width/2, height-25, width*.8, 50, 'static');
+                floor.color = "black";
+                
+                txt = new Sprite(width/2, height/2, width/2, 50, 'static');
+                txt.color = "lightgray";
+                txt.strokeWeight = 0;
+                txt.visible = false;
+                txt.collider = 'none';
+
+                player1 = new Sprite(width*0.2, height/2, playerSize);
+                player1.jumped = true;
+                player1.color = "red";
+                player1.name = "Player 1";
+                player1.text = "1";
+                
+                player2 = new Sprite(width*0.8, height/2, playerSize);
+                player2.jumped = true;
+                player2.color = "blue";
+                player2.name = "Player 2";
+                player2.text = "2";
+
+                players = [player1,player2];
+
+                players.forEach(function(player){
+                    player.textColor = "white";
+                    player.textSize = playerSize;
+                    player.strokeWeight = 0;
+                })
+                
+            }
+
+            function draw() {
+                background("lightgray");
+
+                // player 1
+                if(kb.pressing('d')){ // right
+                    player1.vel.x += xVel;
+                } else if(kb.pressing('a')){ // left
+                    player1.vel.x -= xVel;
+                }
+                if(player1.colliding(floor)){
+                    player1.jumped = false;
+                }
+                if(!player1.jumped && kb.presses('w')){ // up
+                    player1.vel.y -= yVel;
+                    player1.jumped = true;
+                }
+
+                // player 2
+                if(kb.pressing('l')){ // right
+                    player2.vel.x += xVel;
+                } else if(kb.pressing('j')){ // left
+                    player2.vel.x -= xVel;
+                }
+                if(player2.colliding(floor)){
+                    player2.jumped = false;
+                }
+                if(!player2.jumped && kb.presses('i')){ // up
+                    player2.vel.y -= yVel;
+                    player2.jumped = true;
+                }
+
+                // check for fall
+                players.forEach(function(player){
+                    if(player.y > height+playerSize/2){
+                        players.splice(players.indexOf(player),1);
+                        checkGameOver();
+                    }
+                });
+
+            }
+
+            function checkGameOver(){
+                if(players.length == 1){
+                    gameOver(players[0]);
+                }
+            }
+
+            function gameOver(player){
+                txt.visible = true;
+                txt.textSize = playerSize;
+                txt.textColor = player.color
+                txt.text = player.name + " wins";
+            }
+
+            function mousePressed(){
+                // let fs = fullscreen();
+                // fullscreen(!fs);
+                // location.reload();
+            }
+
+            function keyPressed(){
+                let p = document.createElement('p');
+                p.innerHTML = JSON.stringify(contros)
+                document.body.appendChild(p);
+            }
+
+        </script>
+        <p>4/17 9:34am</p>
+    </body>
+</html>
