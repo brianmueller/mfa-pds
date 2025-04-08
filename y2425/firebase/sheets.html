@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!-- Tutorial -->
-<!-- https://docs.google.com/document/d/1oDiBEqqA_WNAQ605y_ca4B8uau-ay_QqhimzsapGS1g/edit?tab=t.0 -->
+<!-- https://docs.google.com/document/d/1otVutRAndtuU7y2sfIzjud0wb3IAUhUQs_g2Qe0B_wo/edit?tab=t.0 -->
+
 <html>
     
 <head>
@@ -64,15 +65,16 @@
 
     function Submit() {
 	  const timestamp = buildTimestamp()
+
       console.log(timestamp)
 	  
-      set(ref(db, timestamp), {
-        name: name.value,
-        email: email.value,
-      });
+	//   set(ref(db, timestamp), {
+	// 	name: name.value,
+	// 	email: email.value,
+	//   });
 
-      name.value = ""
-      email.value = ""
+	  name.value = ""
+	  email.value = ""
 	}
 
     function buildTimestamp() {
