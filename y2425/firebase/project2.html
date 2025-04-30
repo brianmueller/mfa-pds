@@ -68,4 +68,49 @@
     <p>ethical thundercats sustainable locavore quinoa Neutra. Aesthetic tacky sweater single-origin coffee, bicycle rights organic lo-fi street art american apparel ennui four loko ethnic Brooklyn small batch. Forage YOLO polaroid</p>
     <button class="likeButtons">Like</button> <span class="numLikes">0</span>
   </article>
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDFbrBU6YJMJta5E-H8fiNRHXg7vmCszXU",
+      authDomain: "project2-brian.firebaseapp.com",
+      projectId: "project2-brian",
+      storageBucket: "project2-brian.firebasestorage.app",
+      messagingSenderId: "112156080059",
+      appId: "1:112156080059:web:817836ffca90b7c313769e"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const numLikes = document.querySelectorAll('.numLikes')
+    const likeButtons = document.querySelectorAll('.likeButtons')
+
+    for (let i=0; i<likeButtons.length; i++) {
+        likeButtons[i].addEventListener('click', function(){ Like(i) })
+        onValue(ref(db, "/article "+i+"/numLikes"), (snapshot) => {
+            console.log(snapshot)
+            let data = snapshot.val();
+            numLikes[i].innerHTML = data
+        });
+    }
+
+    function Like(i) {
+        // console.log("clicked!")
+        const numberLikes = parseInt(numLikes[i].innerHTML) + 1
+        set(ref(db, "article " + i), {
+            numLikes: numberLikes,
+        });
+    }
+
+  </script>
+
+
 </body>
