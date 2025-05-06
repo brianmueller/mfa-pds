@@ -119,24 +119,24 @@
     <h1>esha's restaurant</h1>
     <h2>a New York City eatery</h2>
     <div class="first">
-        <input type="number" min="0" style="width: 50px">
-        <p>welsh onion soko <span class="price">$14</span><br />
+        <input type="number" min="0" style="width: 50px" class="quantities">
+        <p>appetizer <span class="price">$14</span><br />
             <small>Mustard sierra leone bologi kale chard beet greens black-eyed pea sorrel amaranth garlic tigernut
                 spring onion summer purslane asparagus lentil. </small>
         </p>
     </div>
 
     <div class="second">
-        <input type="number" min="0" style="width: 50px">
-        <p>pastrami boudin tongue <span class="price">$22</span><br />
+        <input type="number" min="0" style="width: 50px" class="quantities">
+        <p>main <span class="price">$22</span><br />
             <small>Tri-tip capicola kielbasa salami brisket chicken rump strip steak drumstick. Meatloaf chuck boudin
                 ribeye pork jowl. Andouille bacon jowl meatloaf pork loin prosciutto bresaola.</small>
         </p>
     </div>
 
     <div class="dessert">
-        <input type="number" min="0" style="width: 50px">
-        <p>fruitcake marzipan pudding dragee <span class="price">$8</span><br />
+        <input type="number" min="0" style="width: 50px" class="quantities">
+        <p>dessert <span class="price">$8</span><br />
             <small>Lollipop tart cotton candy jelly-o carrot cake apple pie cupcake. Jelly-o bear claw ice cream candy
                 canes.</small>
         </p>
@@ -177,15 +177,33 @@
 
         const name = document.querySelector("#name")
         const email = document.querySelector("#email")
+        const quantities = document.querySelectorAll(".quantities")
+        const itemsList = ["appetizer", "main", "dessert"]
+        const prices = document.querySelectorAll(".price")
+
         document.querySelector('#submit').addEventListener('click', Submit)
 
         function Submit() {
             const timestamp = buildTimestamp()
+            let total = 0
+            let cart = {}
+            for (let i = 0; i < quantities.length; i = i + 1) {
+                if (quantities[i].value != "0" && quantities[i].value != "") {
+                    let price = prices[i].innerHTML.replace('$', '')
+                    total = total + quantities[i].value * price
+                    cart[itemsList[i]] = parseInt(quantities[i].value)
+                }
+                quantities[i].value = ""
+            }
+
             console.log(timestamp)
 
             set(ref(db, timestamp), {
                 name: name.value,
                 email: email.value,
+                cart: cart,
+                totalPrice: total,
+                paid: "not yet"
             });
 
             name.value = ""
